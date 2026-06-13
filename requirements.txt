@@ -1,0 +1,16 @@
+langchain
+langchain-community
+langchain-core
+langchain-groq
+langchain-chroma
+langchain-huggingface
+pypdf
+uvicorn
+python-dotenv
+ragas
+
+rank-bm25
+pymupdf
+tiktoken
+langchain-redis 
+redis
