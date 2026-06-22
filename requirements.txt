@@ -16,7 +16,7 @@ langchain-pinecone==0.2.0
 langchain-text-splitters==0.3.2
 
 # Vector DB + Embeddings
-pinecone==5.3.1
+pinecone==6.0.2
 sentence-transformers==3.2.1
 
 # Utils
