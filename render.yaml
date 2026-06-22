@@ -1,30 +1,16 @@
 services:
-  # FastAPI backend
   - type: web
     name: research-rag-api
     runtime: python
+    pythonVersion: "3.11"   # add this line
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
-    envVars:
-      - key: GROQ_API_KEY
-        sync: false
-      - key: PINECONE_API_KEY
-        sync: false
-      - key: PINECONE_INDEX
-        value: rag-research
-      - key: PINECONE_CLOUD
-        value: aws
-      - key: PINECONE_REGION
-        value: us-east-1
-      - key: ALLOWED_ORIGINS
-        value: "*"
+    ...
 
-  # Streamlit frontend
   - type: web
     name: research-rag-ui
     runtime: python
+    pythonVersion: "3.11"   # add this line
     buildCommand: pip install -r requirements.txt
     startCommand: streamlit run streamlit_app.py --server.port $PORT --server.address 0.0.0.0
-    envVars:
-      - key: API_BASE_URL
-        value: https://research-rag-api.onrender.com   # update to your API service URL
+    ...
