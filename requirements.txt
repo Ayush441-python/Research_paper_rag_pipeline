@@ -1,25 +1,25 @@
 # API
-fastapi==0.115.0
-uvicorn[standard]==0.30.6
-python-multipart==0.0.9
-pydantic==2.8.2
+fastapi 
+uvicorn[standard] 
+python-multipart 
+pydantic 
 
 # Frontend
-streamlit==1.39.0
+streamlit 
 
 # LangChain
-langchain==0.3.7
-langchain-community==0.3.7
-langchain-groq==0.2.1
-langchain-huggingface==0.1.2
-langchain-pinecone==0.2.2
-langchain-text-splitters==0.3.2
+langchain
+langchain-community 
+langchain-groq 
+langchain-huggingface 
+langchain-pinecon 
+langchain-text-splitters 
 
 # Vector DB + Embeddings
-pinecone==6.0.2
-sentence-transformers==3.2.1
+pinecone 
+sentence-transformers 
 
 # Utils
-pypdf==4.3.1
-python-dotenv==1.0.1
-requests==2.32.3
+pypdf 
+python-dotenv 
+requests 
