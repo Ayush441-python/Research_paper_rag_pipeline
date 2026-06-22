@@ -2,7 +2,7 @@ services:
   - type: web
     name: research-rag-api
     runtime: python
-    pythonVersion: "3.11"
+    pythonVersion: "3.11.0"
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
     envVars:
@@ -22,7 +22,7 @@ services:
   - type: web
     name: research-rag-ui
     runtime: python
-    pythonVersion: "3.11"
+    pythonVersion: "3.11.0"
     buildCommand: pip install -r requirements.txt
     startCommand: streamlit run streamlit_app.py --server.port $PORT --server.address 0.0.0.0
     envVars:
