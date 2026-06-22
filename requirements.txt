@@ -1,16 +1,25 @@
-langchain
-langchain-community
-langchain-core
-langchain-groq
-langchain-chroma
-langchain-huggingface
-pypdf
-uvicorn
-python-dotenv
-ragas
+# API
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+python-multipart==0.0.9
+pydantic==2.8.2
 
-rank-bm25
-pymupdf
-tiktoken
-langchain-redis 
-redis
+# Frontend
+streamlit==1.39.0
+
+# LangChain
+langchain==0.3.7
+langchain-community==0.3.7
+langchain-groq==0.2.1
+langchain-huggingface==0.1.2
+langchain-pinecone==0.2.0
+langchain-text-splitters==0.3.2
+
+# Vector DB + Embeddings
+pinecone==5.3.1
+sentence-transformers==3.2.1
+
+# Utils
+pypdf==4.3.1
+python-dotenv==1.0.1
+requests==2.32.3

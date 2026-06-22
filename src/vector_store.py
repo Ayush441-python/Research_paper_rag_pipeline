@@ -1,22 +1,43 @@
-from langchain_redis import RedisVectorStore
-from langchain_huggingface import HuggingFaceEmbeddings
+import os
+from pinecone import Pinecone, ServerlessSpec
+from langchain_pinecone import PineconeVectorStore
 
-### docker run -d --name redis-stack -p 6379:6379 -p 8001:8001 redis/redis-stack:latest
+from src.embeddings import embeddings
 
-REDIS_URL = "redis://localhost:6379"
-INDEX_NAME = "research_papers"
+# ── Config from env ──────────────────────────────────────────────────────────
+PINECONE_API_KEY   = os.getenv["PINECONE_API_KEY"]
+PINECONE_INDEX     = os.getenv("PINECONE_INDEX", "rag-research")
+PINECONE_CLOUD     = os.getenv("PINECONE_CLOUD", "aws")
+PINECONE_REGION    = os.getenv("PINECONE_REGION", "us-east-1")
+EMBEDDING_DIM      = 384   # bge-small-en-v1.5 output dim
 
-embeddings = HuggingFaceEmbeddings(
-    model_name="BAAI/bge-small-en-v1.5"
-)
+_pc = Pinecone(api_key=PINECONE_API_KEY)
 
 
-def create_vector_store(chunks):
-    vector_store = RedisVectorStore.from_documents(
-        documents=chunks,
+def _ensure_index():
+    """Create the Pinecone serverless index if it doesn't exist yet."""
+    existing = [idx.name for idx in _pc.list_indexes()]
+    if PINECONE_INDEX not in existing:
+        _pc.create_index(
+            name=PINECONE_INDEX,
+            dimension=EMBEDDING_DIM,
+            metric="cosine",
+            spec=ServerlessSpec(cloud=PINECONE_CLOUD, region=PINECONE_REGION),
+        )
+
+
+def get_vector_store() -> PineconeVectorStore:
+    """Return a LangChain PineconeVectorStore connected to our index."""
+    _ensure_index()
+    return PineconeVectorStore(
+        index_name=PINECONE_INDEX,
         embedding=embeddings,
-        redis_url=REDIS_URL,
-        index_name=INDEX_NAME
+        pinecone_api_key=PINECONE_API_KEY,
     )
 
-    return vector_store
+
+def upsert_chunks(chunks: list) -> int:
+    """Embed and upsert document chunks. Returns number of chunks added."""
+    store = get_vector_store()
+    store.add_documents(chunks)
+    return len(chunks)

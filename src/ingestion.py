@@ -1,33 +1,27 @@
-from loader import load_pdf
-from splitter import text_splitter
-from vector_store import create_vector_store
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-import os
+from src.vector_store import upsert_chunks
 
-DATA_PATH = os.path.join(
-    os.path.dirname(__file__),
-    "..",
-    "data"
+
+_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200,
 )
 
 
-def ingest_documents():
-    print("Loading PDFs...")
-    docs = load_pdf(DATA_PATH)
-    print(f"Loaded {len(docs)} pages")
+def ingest_single_pdf(file_path: str, source_name: str = "") -> int:
+    """
+    Load, split, and upsert one PDF.
+    Returns the number of chunks indexed.
+    """
+    loader = PyPDFLoader(file_path)
+    docs = loader.load()
 
-    print("Splitting documents...")
-    chunks = text_splitter(docs)
-    print(f"Created {len(chunks)} chunks")
+    # Tag each chunk with the original filename for traceability
+    if source_name:
+        for doc in docs:
+            doc.metadata["source"] = source_name
 
-    print("Creating vector store...")
-    create_vector_store(chunks)
-
-    print("Ingestion completed successfully!")
-
-
-if __name__ == "__main__":
-    ingest_documents()
-
-
-    
+    chunks = _splitter.split_documents(docs)
+    return upsert_chunks(chunks)
