@@ -12,7 +12,7 @@ langchain
 langchain-community 
 langchain-groq 
 langchain-huggingface 
-langchain-pinecon 
+langchain-pinecone 
 langchain-text-splitters 
 
 # Vector DB + Embeddings
